@@ -1,14 +1,15 @@
 package ru.homework.geometry.figures;
 
-public class Triangle {
-    private double side_a;
-    private double side_b;
-    private double side_c;
+public record Triangle (double side_a, double side_b, double side_c) {
+    public Triangle  {
+        if (side_a < 0 || side_b < 0 || side_c < 0) {
+            throw new IllegalArgumentException("Triangle side should be non-negative");
+        }
 
-    public Triangle(double a, double b, double c) {
-        this.side_a = a;
-        this.side_b = b;
-        this.side_c = c;
+        if (side_a + side_b < side_c || side_a + side_c < side_b || side_b + side_c < side_a) {
+            throw new IllegalArgumentException("The sum of the lengths of two sides of a triangle" +
+                                               " must always be greater than the length of the third side");
+        }
     }
 
     public void printProperties() {
