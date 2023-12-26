@@ -40,4 +40,43 @@ public class TriangleMethodTests {
             // OK
         }
     }
+
+    @Test
+    void testEquality() {
+        var t1 = new Triangle(3.4, 8.1, 10.9);
+        var t2 = new Triangle(3.4, 8.1, 10.9);
+        Assertions.assertEquals(t1, t2);
+    }
+    @Test
+    void testEquality2() {
+        var t1 = new Triangle(3.4, 8.1, 10.9);
+        var t2 = new Triangle(8.1, 3.4, 10.9);
+        Assertions.assertEquals(t1, t2);
+    }
+    @Test
+    void testEquality3() {
+        var t1 = new Triangle(3.4, 8.1, 10.9);
+        var t2 = new Triangle(10.9, 8.1, 3.4);
+        Assertions.assertEquals(t1, t2);
+    }
+    @Test
+    void testEquality4() {
+        var t1 = new Triangle(3.4, 8.1, 10.9);
+        var t2 = new Triangle(10.9, 3.4, 8.1);
+        Assertions.assertEquals(t1, t2);
+    }
+
+    @Test
+    void testNonEquality() {
+        var t1 = new Triangle(3.4, 8.1, 10.9);
+        var t2 = new Triangle(4.4, 8.1, 10.9);
+        Assertions.assertNotEquals(t1, t2);
+    }
+
+    @Test
+    void testFail() {
+        var t1 = new Triangle(3.4, 8.1, 10.9);
+        var t2 = new Triangle(3.4, 8.1, 10.9);
+        Assertions.assertTrue(t1.equals(t2));
+    }
 }
