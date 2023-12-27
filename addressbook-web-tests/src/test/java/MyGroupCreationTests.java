@@ -3,12 +3,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MyGroupCreationTests {
     private WebDriver driver;
@@ -16,23 +12,21 @@ public class MyGroupCreationTests {
     @BeforeEach
     public void setUp() {
         driver = new FirefoxDriver();
+        driver.get("http://localhost:81/addressbook/");
+        driver.manage().window().setSize(new Dimension(1150, 790));
+        driver.findElement(By.name("user")).sendKeys("admin");
+        driver.findElement(By.name("pass")).sendKeys("secret");
+        driver.findElement(By.xpath("//input[@value=\'Login\']")).click();
     }
 
     @AfterEach
     public void tearDown() {
+        driver.findElement(By.linkText("Logout")).click();
         driver.quit();
     }
 
     @Test
     public void canCreateMyGroup() {
-        driver.get("http://localhost:81/addressbook/");
-        driver.manage().window().setSize(new Dimension(1177, 772));
-        driver.findElement(By.cssSelector("html")).click();
-        driver.findElement(By.name("user")).click();
-        driver.findElement(By.name("user")).sendKeys("admin");
-        driver.findElement(By.name("pass")).click();
-        driver.findElement(By.name("pass")).sendKeys("secret");
-        driver.findElement(By.cssSelector("input:nth-child(7)")).click();
         driver.findElement(By.linkText("groups")).click();
         driver.findElement(By.name("new")).click();
         driver.findElement(By.name("group_name")).click();
@@ -43,6 +37,5 @@ public class MyGroupCreationTests {
         driver.findElement(By.name("group_footer")).sendKeys("my_group_footer");
         driver.findElement(By.name("submit")).click();
         driver.findElement(By.linkText("group page")).click();
-        driver.findElement(By.linkText("Logout")).click();
     }
 }
