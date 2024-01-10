@@ -13,9 +13,9 @@ public class HelperBase {
         my_manager.my_driver.findElement(my_locator).click();
     }
 
-    protected void type(By my_locator, String my_group_header) {
+    protected void type(By my_locator, String text) {
         click(my_locator);
-        my_manager.my_driver.findElement(my_locator).sendKeys(my_group_header);
+        my_manager.my_driver.findElement(my_locator).sendKeys(text);
     }
 
     protected void quit() {

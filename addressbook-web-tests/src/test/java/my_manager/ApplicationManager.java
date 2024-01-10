@@ -10,6 +10,7 @@ public class ApplicationManager {
     protected WebDriver my_driver;
     public LoginHelper my_session;
     private GroupHelper my_groups;
+    private ContactHelper my_contacts;
 
     public void init() {
         my_driver = new FirefoxDriver();
@@ -30,6 +31,13 @@ public class ApplicationManager {
             my_groups = new GroupHelper(this);
         }
         return my_groups;
+    }
+
+    public ContactHelper my_contacts() {
+        if (my_contacts == null) {
+            my_contacts = new ContactHelper(this);
+        }
+        return my_contacts;
     }
 
     protected boolean isElementPresent(By myLocator) {
