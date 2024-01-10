@@ -5,6 +5,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 public class ApplicationManager {
     protected WebDriver my_driver;
@@ -12,8 +13,14 @@ public class ApplicationManager {
     private GroupHelper my_groups;
     private ContactHelper my_contacts;
 
-    public void init() {
-        my_driver = new FirefoxDriver();
+    public void init(String my_browser) {
+        if ("firefox".equals(my_browser)) {
+            my_driver = new FirefoxDriver();
+        } else if ("chrome".equals(my_browser)) {
+            my_driver = new ChromeDriver();
+        } else {
+            throw new IllegalArgumentException(String.format("Unknown browser %s", my_browser));
+        }
         my_driver.get("http://localhost:81/addressbook/");
         my_driver.manage().window().setSize(new Dimension(1150, 790));
         my_session().login("admin", "secret");

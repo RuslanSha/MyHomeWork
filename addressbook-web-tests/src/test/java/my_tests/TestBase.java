@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 public class TestBase {
-
     protected static ApplicationManager my_app;
 
     @BeforeEach
@@ -13,7 +12,7 @@ public class TestBase {
         if (my_app == null) {
             my_app = new ApplicationManager();
         }
-        my_app.init();
+        my_app.init(System.getProperty("browser","firefox"));
     }
 
     @AfterEach
