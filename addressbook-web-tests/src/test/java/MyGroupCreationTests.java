@@ -1,29 +1,7 @@
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class MyGroupCreationTests {
-    private WebDriver driver;
-
-    @BeforeEach
-    public void setUp() {
-        driver = new FirefoxDriver();
-        driver.get("http://localhost:81/addressbook/");
-        driver.manage().window().setSize(new Dimension(1150, 790));
-        driver.findElement(By.name("user")).sendKeys("admin");
-        driver.findElement(By.name("pass")).sendKeys("secret");
-        driver.findElement(By.xpath("//input[@value=\'Login\']")).click();
-    }
-
-    @AfterEach
-    public void tearDown() {
-        driver.findElement(By.linkText("Logout")).click();
-        driver.quit();
-    }
+public class MyGroupCreationTests extends TestBase {
 
     @Test
     public void canCreateMyGroup() {
