@@ -1,11 +1,12 @@
-import my_tests.TestBase;
+package my_tests;
+
 import org.junit.jupiter.api.Test;
 
 public class MyGroupCreationTests extends TestBase {
 
     @Test
     public void canCreateMyGroup() {
-        app.openMyGroupsPage();
-        app.createMyGroup();
+        my_app.my_groups().openMyGroupsPage();
+        my_app.my_groups().createMyGroup();
     }
 }

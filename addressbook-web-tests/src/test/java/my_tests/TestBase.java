@@ -6,18 +6,18 @@ import org.junit.jupiter.api.BeforeEach;
 
 public class TestBase {
 
-    protected static ApplicationManager app;
+    protected static ApplicationManager my_app;
 
     @BeforeEach
     public void setUp() {
-        if (app == null) {
-            app = new ApplicationManager();
+        if (my_app == null) {
+            my_app = new ApplicationManager();
         }
-        app.init();
+        my_app.init();
     }
 
     @AfterEach
     public void tearDown() {
-        app.close();
+        my_app.my_session().close();
     }
 }
