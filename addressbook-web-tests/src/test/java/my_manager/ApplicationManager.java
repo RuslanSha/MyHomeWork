@@ -22,7 +22,7 @@ public class ApplicationManager {
             throw new IllegalArgumentException(String.format("Unknown browser %s", my_browser));
         }
         my_driver.get("http://localhost:81/addressbook/");
-        my_driver.manage().window().setSize(new Dimension(1150, 790));
+        my_driver.manage().window().setSize(new Dimension(1050, 790));
         my_session().login("admin", "secret");
     }
 

@@ -1,6 +1,6 @@
 package my_manager;
 
-import org.openqa.selenium.Alert;
+import my_model.ContactData;
 import org.openqa.selenium.By;
 
 public class ContactHelper extends HelperBase {
@@ -9,19 +9,12 @@ public class ContactHelper extends HelperBase {
         super(my_manager);
     }
 
-    public void createMyContact() {
-        click(By.linkText("add new"));
-        type(By.name("firstname"), "my_firstname");
-        type(By.name("middlename"), "my_middlename");
-        type(By.name("lastname"), "my_lastname");
-        type(By.name("nickname"), "my_nickname");
-        type(By.name("title"), "my_title");
-        type(By.name("company"), "my_company");
-        type(By.name("address"), "my_address");
-        type(By.name("mobile"), "85557776611");
-        type(By.name("email"), "my_email@my_domain");
-        click(By.name("submit"));
-        click(By.linkText("home page"));
+    public void createMyContact(ContactData my_contact) {
+        openMyContactsPage();
+        initMyContactCreation();
+        fillMyContactForm(my_contact);
+        submitMyContactCreation();
+        returnToMyContactsPage();
     }
 
     public void removeMyContact() {
@@ -41,5 +34,29 @@ public class ContactHelper extends HelperBase {
 
     public boolean isMyContactPresent() {
         return my_manager.isElementPresent(By.name("selected[]"));
+    }
+
+    private void initMyContactCreation() {
+        click(By.linkText("add new"));
+    }
+
+    private void fillMyContactForm(ContactData my_contact) {
+        type(By.name("firstname"), my_contact.my_firstname());
+        type(By.name("middlename"), my_contact.my_middlename());
+        type(By.name("lastname"), my_contact.my_lastname());
+        type(By.name("nickname"), my_contact.my_nickname());
+        type(By.name("title"), my_contact.my_title());
+        type(By.name("company"), my_contact.my_company());
+        type(By.name("address"), my_contact.my_address());
+        type(By.name("mobile"), my_contact.my_mobile());
+        type(By.name("email"), my_contact.my_email());
+    }
+
+    private void submitMyContactCreation() {
+        click(By.name("submit"));
+    }
+
+    private void returnToMyContactsPage() {
+        click(By.linkText("home page"));
     }
 }

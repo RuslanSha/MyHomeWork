@@ -4,6 +4,8 @@ import my_manager.ApplicationManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.util.Random;
+
 public class TestBase {
     protected static ApplicationManager my_app;
 
@@ -18,5 +20,14 @@ public class TestBase {
     @AfterEach
     public void tearDown() {
         my_app.my_session().close();
+    }
+
+    public static String randomString(int length) {
+        var my_rnd = new Random();
+        var my_result = "";
+        for (int i = 0; i < length; i++) {
+            my_result += (char)('a' + my_rnd.nextInt(26));
+        }
+        return my_result;
     }
 }
