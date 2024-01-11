@@ -29,8 +29,9 @@ public class GroupHelper extends HelperBase {
         }
     }
 
-    public boolean isMyGroupPresent() {
-        return my_manager.isElementPresent(By.name("selected[]"));
+    public int getMyGroupsCount() {
+        openMyGroupsPage();
+        return my_manager.my_driver.findElements(By.name("selected[]")).size();
     }
 
     private void initMyGroupCreation() {

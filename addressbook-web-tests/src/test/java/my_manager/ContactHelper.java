@@ -28,12 +28,13 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("home"));
     }
 
-    public void openMyContactsPage() {
-        click(By.linkText("home"));
+    public int getMyContactsCount() {
+        openMyContactsPage();
+        return my_manager.my_driver.findElements(By.name("selected[]")).size();
     }
 
-    public boolean isMyContactPresent() {
-        return my_manager.isElementPresent(By.name("selected[]"));
+    public void openMyContactsPage() {
+        click(By.linkText("home"));
     }
 
     private void initMyContactCreation() {

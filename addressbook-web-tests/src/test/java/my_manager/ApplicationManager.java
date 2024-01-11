@@ -9,7 +9,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class ApplicationManager {
     protected WebDriver my_driver;
-    public LoginHelper my_session;
+    private LoginHelper my_session;
     private GroupHelper my_groups;
     private ContactHelper my_contacts;
 
@@ -55,5 +55,4 @@ public class ApplicationManager {
             return false;
         }
     }
-
 }
