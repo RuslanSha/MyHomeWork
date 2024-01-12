@@ -32,6 +32,15 @@ public class ContactHelper extends HelperBase {
         returnToMyHomePage();
     }
 
+    public void modifyMyContact(ContactData my_contact, ContactData my_modifiedContact) {
+        openMyContactsPage();
+        selectMyContact(my_contact);
+        initMyContactModification(my_contact);
+        fillMyContactName(my_modifiedContact);
+        submitMyContactModification();
+        returnToMyHomePage();
+    }
+
     public int getMyContactsCount() {
         openMyContactsPage();
         return my_manager.my_driver.findElements(By.name("selected[]")).size();
@@ -40,12 +49,19 @@ public class ContactHelper extends HelperBase {
     public List<ContactData> getMyContactList() {
         openMyContactsPage();
         var my_contacts = new ArrayList<ContactData>();
-        var my_checkboxes = my_manager.my_driver.findElements(
-                By.xpath("//input[@type=\'checkbox\'][@name=\'selected[]\']"));
-        for (var my_checkbox : my_checkboxes) {
-            var my_id = my_checkbox.getAttribute("value");
-            var my_email = my_checkbox.getAttribute("accept");
-            my_contacts.add(new ContactData().withId(my_id).withEmail(my_email));
+        var my_table = my_manager.my_driver.findElements(
+                By.cssSelector("table[id='maintable']>tbody>tr[name='entry']"));
+        for (var my_element : my_table) {
+            var my_id = my_element.findElement(By.cssSelector("td.center>input"))
+                    .getAttribute("value");
+            var my_lastname = my_element.findElement(By.cssSelector("td:nth-child(2)"))
+                    .getText();
+            var my_firstname = my_element.findElement(By.cssSelector("td:nth-child(3)"))
+                    .getText();
+            my_contacts.add(new ContactData()
+                    .withId(my_id)
+                    .withFirstname(my_firstname)
+                    .withLastname(my_lastname));
         }
         return my_contacts;
     }
@@ -56,6 +72,10 @@ public class ContactHelper extends HelperBase {
 
     private void initMyContactCreation() {
         click(By.linkText("add new"));
+    }
+
+    private void initMyContactModification(ContactData my_contact) {
+        click(By.cssSelector(String.format("a[href='edit.php?id=%s']", my_contact.my_id())));
     }
 
     private void fillMyContactForm(ContactData my_contact) {
@@ -70,8 +90,17 @@ public class ContactHelper extends HelperBase {
         type(By.name("email"), my_contact.my_email());
     }
 
+    private void fillMyContactName(ContactData my_contact) {
+        type(By.name("firstname"), my_contact.my_firstname());
+        type(By.name("lastname"), my_contact.my_lastname());
+    }
+
     private void submitMyContactCreation() {
         click(By.name("submit"));
+    }
+
+    private void submitMyContactModification() {
+        click(By.name("update"));
     }
 
     private void selectMyContact(ContactData my_contact) {

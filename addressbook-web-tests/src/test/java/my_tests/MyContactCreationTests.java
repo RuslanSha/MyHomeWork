@@ -40,14 +40,13 @@ public class MyContactCreationTests extends TestBase {
         myNewContacts.sort(compareById);
         var myExpectedList = new ArrayList<>(myOldContacts);
         myExpectedList.add(my_contact.withId(myNewContacts.get(myNewContacts.size() - 1).my_id())
-                .withFirstname("")
                 .withMiddlename("")
-                .withLastname("")
                 .withNickname("")
                 .withTitle("")
                 .withCompany("")
                 .withAddress("")
                 .withMobile("")
+                .withEmail("")
         );
         myExpectedList.sort(compareById);
         Assertions.assertEquals(myNewContacts, myExpectedList);

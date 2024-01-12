@@ -15,6 +15,7 @@ public class HelperBase {
 
     protected void type(By my_locator, String text) {
         click(my_locator);
+        my_manager.my_driver.findElement(my_locator).clear();
         my_manager.my_driver.findElement(my_locator).sendKeys(text);
     }
 

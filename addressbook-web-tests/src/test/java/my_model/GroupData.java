@@ -2,7 +2,7 @@ package my_model;
 
 public record GroupData(String my_id, String my_name, String my_header, String my_footer) {
     public GroupData() {
-        this("", "","","");
+        this("", "", "", "");
     }
 
     public GroupData withId(String my_id) {

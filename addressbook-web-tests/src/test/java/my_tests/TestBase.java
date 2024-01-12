@@ -14,7 +14,7 @@ public class TestBase {
         if (my_app == null) {
             my_app = new ApplicationManager();
         }
-        my_app.init(System.getProperty("browser", "firefox"));
+        my_app.init(System.getProperty("browser", "chrome"));
     }
 
     @AfterEach

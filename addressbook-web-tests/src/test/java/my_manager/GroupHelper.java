@@ -26,6 +26,15 @@ public class GroupHelper extends HelperBase {
         returnToMyGroupsPage();
     }
 
+    public void modifyMyGroup(GroupData my_group, GroupData my_modifiedGroup) {
+        openMyGroupsPage();
+        selectMyGroup(my_group);
+        initMyGroupModification();
+        fillMyGroupName(my_modifiedGroup);
+        submitMyGroupModification();
+        returnToMyGroupsPage();
+    }
+
     public void openMyGroupsPage() {
         if (!my_manager.isElementPresent(By.name("new"))) {
             click(By.linkText("groups"));
@@ -54,14 +63,26 @@ public class GroupHelper extends HelperBase {
         click(By.name("new"));
     }
 
+    private void initMyGroupModification() {
+        click(By.name("edit"));
+    }
+
     private void fillMyGroupForm(GroupData my_group) {
         type(By.name("group_name"), my_group.my_name());
         type(By.name("group_header"), my_group.my_header());
         type(By.name("group_footer"), my_group.my_footer());
     }
 
+    private void fillMyGroupName(GroupData my_group) {
+        type(By.name("group_name"), my_group.my_name());
+    }
+
     private void submitMyGroupCreation() {
         click(By.name("submit"));
+    }
+
+    private void submitMyGroupModification() {
+        click(By.name("update"));
     }
 
     private void returnToMyGroupsPage() {
