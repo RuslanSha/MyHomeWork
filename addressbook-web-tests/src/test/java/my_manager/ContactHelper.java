@@ -3,6 +3,9 @@ package my_manager;
 import my_model.ContactData;
 import org.openqa.selenium.By;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ContactHelper extends HelperBase {
 
     public ContactHelper(ApplicationManager my_manager) {
@@ -17,20 +20,34 @@ public class ContactHelper extends HelperBase {
         returnToMyContactsPage();
     }
 
-    public void removeMyContact() {
-        click(By.name("selected[]"));
-        click(By.xpath("//input[@value=\'Delete\']"));
+    public void removeMyContact(ContactData my_contact) {
+        openMyContactsPage();
+        selectMyContact(my_contact);
+        removeMySelectedContact();
         try {
             my_manager.my_driver.switchTo().alert().accept();
         } catch (Exception e) {
 //            OK for any errors
         }
-        click(By.linkText("home"));
+        returnToMyHomePage();
     }
 
     public int getMyContactsCount() {
         openMyContactsPage();
         return my_manager.my_driver.findElements(By.name("selected[]")).size();
+    }
+
+    public List<ContactData> getMyContactList() {
+        openMyContactsPage();
+        var my_contacts = new ArrayList<ContactData>();
+        var my_checkboxes = my_manager.my_driver.findElements(
+                By.xpath("//input[@type=\'checkbox\'][@name=\'selected[]\']"));
+        for (var my_checkbox : my_checkboxes) {
+            var my_id = my_checkbox.getAttribute("value");
+            var my_email = my_checkbox.getAttribute("accept");
+            my_contacts.add(new ContactData().withId(my_id).withEmail(my_email));
+        }
+        return my_contacts;
     }
 
     public void openMyContactsPage() {
@@ -57,7 +74,19 @@ public class ContactHelper extends HelperBase {
         click(By.name("submit"));
     }
 
+    private void selectMyContact(ContactData my_contact) {
+        click(By.cssSelector(String.format("input[value='%s']", my_contact.my_id())));
+    }
+
+    private void removeMySelectedContact() {
+        click(By.xpath("//input[@value=\'Delete\']"));
+    }
+
     private void returnToMyContactsPage() {
         click(By.linkText("home page"));
+    }
+
+    private void returnToMyHomePage() {
+        click(By.linkText("home"));
     }
 }

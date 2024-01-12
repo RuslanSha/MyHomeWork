@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class MyContactCreationTests extends TestBase {
@@ -13,7 +14,8 @@ public class MyContactCreationTests extends TestBase {
     public static List<ContactData> myContactProvider() {
         var result = new ArrayList<ContactData>();
         for (int i = 2; i < 4; i++) {
-            result.add(new ContactData(randomString(i * 2),
+            result.add(new ContactData("",
+                    randomString(i * 2),
                     randomString(i * 2),
                     randomString(i * 3),
                     randomString(i * 2),
@@ -21,7 +23,7 @@ public class MyContactCreationTests extends TestBase {
                     randomString(i * 4),
                     randomString(i * 5),
                     randomNumber(11),
-                    randomString(i * 2) + '@' + randomString(i * 2)));
+                    String.format("%s@%s.info", randomString(i * 2), randomString(i * 2))));
         }
         return result;
     }
@@ -29,9 +31,25 @@ public class MyContactCreationTests extends TestBase {
     @ParameterizedTest
     @MethodSource("myContactProvider")
     public void canCreateMyMultipleContact(ContactData my_contact) {
-        int myContactsCount = my_app.my_contacts().getMyContactsCount();
+        var myOldContacts = my_app.my_contacts().getMyContactList();
         my_app.my_contacts().createMyContact(my_contact);
-        int myNewContactsCount = my_app.my_contacts().getMyContactsCount();
-        Assertions.assertEquals(myContactsCount + 1, myNewContactsCount);
+        var myNewContacts = my_app.my_contacts().getMyContactList();
+        Comparator<ContactData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.my_id()), Integer.parseInt(o2.my_id()));
+        };
+        myNewContacts.sort(compareById);
+        var myExpectedList = new ArrayList<>(myOldContacts);
+        myExpectedList.add(my_contact.withId(myNewContacts.get(myNewContacts.size() - 1).my_id())
+                .withFirstname("")
+                .withMiddlename("")
+                .withLastname("")
+                .withNickname("")
+                .withTitle("")
+                .withCompany("")
+                .withAddress("")
+                .withMobile("")
+        );
+        myExpectedList.sort(compareById);
+        Assertions.assertEquals(myNewContacts, myExpectedList);
     }
 }

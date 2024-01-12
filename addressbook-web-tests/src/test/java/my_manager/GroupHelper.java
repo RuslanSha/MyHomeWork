@@ -3,6 +3,9 @@ package my_manager;
 import my_model.GroupData;
 import org.openqa.selenium.By;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GroupHelper extends HelperBase {
     public GroupHelper(ApplicationManager my_manager) {
         super(my_manager);
@@ -16,9 +19,9 @@ public class GroupHelper extends HelperBase {
         returnToMyGroupsPage();
     }
 
-    public void removeMyGroup() {
+    public void removeMyGroup(GroupData my_group) {
         openMyGroupsPage();
-        selectMyGroup();
+        selectMyGroup(my_group);
         removeMySelectedGroup();
         returnToMyGroupsPage();
     }
@@ -32,6 +35,19 @@ public class GroupHelper extends HelperBase {
     public int getMyGroupsCount() {
         openMyGroupsPage();
         return my_manager.my_driver.findElements(By.name("selected[]")).size();
+    }
+
+    public List<GroupData> getMyGroupList() {
+        openMyGroupsPage();
+        var my_groups = new ArrayList<GroupData>();
+        var my_spans = my_manager.my_driver.findElements(By.cssSelector("span.group"));
+        for (var my_span : my_spans) {
+            var my_name = my_span.getText();
+            var my_checkbox = my_span.findElement(By.name("selected[]"));
+            var my_id = my_checkbox.getAttribute("value");
+            my_groups.add(new GroupData().withId(my_id).withName(my_name));
+        }
+        return my_groups;
     }
 
     private void initMyGroupCreation() {
@@ -52,8 +68,8 @@ public class GroupHelper extends HelperBase {
         click(By.linkText("group page"));
     }
 
-    private void selectMyGroup() {
-        click(By.name("selected[]"));
+    private void selectMyGroup(GroupData my_group) {
+        click(By.cssSelector(String.format("input[value='%s']", my_group.my_id())));
     }
 
     private void removeMySelectedGroup() {

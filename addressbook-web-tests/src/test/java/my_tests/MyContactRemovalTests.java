@@ -4,12 +4,16 @@ import my_model.ContactData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class MyContactRemovalTests extends TestBase {
 
     @Test
     public void canRemoveMyContact() {
         if (my_app.my_contacts().getMyContactsCount() == 0) {
-            my_app.my_contacts().createMyContact(new ContactData("my_firstname",
+            my_app.my_contacts().createMyContact(new ContactData("",
+                    "my_firstname",
                     "my_middlename",
                     "my_lastname",
                     "my_nickname",
@@ -19,9 +23,13 @@ public class MyContactRemovalTests extends TestBase {
                     "81236669977",
                     "my_email@my_domain"));
         }
-        int myContactsCount = my_app.my_contacts().getMyContactsCount();
-        my_app.my_contacts().removeMyContact();
-        int myNewContactsCount = my_app.my_contacts().getMyContactsCount();
-        Assertions.assertEquals(myContactsCount - 1, myNewContactsCount);
+        var myOldContacts = my_app.my_contacts().getMyContactList();
+        var my_rnd = new Random();
+        var my_index = my_rnd.nextInt(myOldContacts.size());
+        my_app.my_contacts().removeMyContact(myOldContacts.get(my_index));
+        var myNewContacts = my_app.my_contacts().getMyContactList();
+        var myExpectedList = new ArrayList<>(myOldContacts);
+        myExpectedList.remove(my_index);
+        Assertions.assertEquals(myNewContacts, myExpectedList);
     }
 }
