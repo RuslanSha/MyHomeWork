@@ -21,7 +21,8 @@ public class MyContactRemovalTests extends TestBase {
                     "my_company",
                     "my_address",
                     "81236669977",
-                    "my_email@my_domain"));
+                    "my_email@my_domain",
+                    "src/test/resources/images/avatar.png"));
         }
         var myOldContacts = my_app.my_contacts().getMyContactList();
         var my_rnd = new Random();

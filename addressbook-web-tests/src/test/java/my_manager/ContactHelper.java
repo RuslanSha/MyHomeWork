@@ -6,6 +6,8 @@ import org.openqa.selenium.By;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.bytebuddy.description.type.TypeList.Generic.ForDetachedTypes.attach;
+
 public class ContactHelper extends HelperBase {
 
     public ContactHelper(ApplicationManager my_manager) {
@@ -83,6 +85,7 @@ public class ContactHelper extends HelperBase {
         type(By.name("middlename"), my_contact.my_middlename());
         type(By.name("lastname"), my_contact.my_lastname());
         type(By.name("nickname"), my_contact.my_nickname());
+        attach(By.name("photo"), my_contact.my_photo());
         type(By.name("title"), my_contact.my_title());
         type(By.name("company"), my_contact.my_company());
         type(By.name("address"), my_contact.my_address());

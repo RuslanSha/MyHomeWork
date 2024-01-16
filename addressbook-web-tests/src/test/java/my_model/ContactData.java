@@ -9,10 +9,12 @@ public record ContactData(String my_id,
                           String my_company,
                           String my_address,
                           String my_mobile,
-                          String my_email) {
+                          String my_email,
+                          String my_photo) {
 
     public ContactData() {
         this("",
+                "",
                 "",
                 "",
                 "",
@@ -34,7 +36,8 @@ public record ContactData(String my_id,
                 this.my_company,
                 this.my_address,
                 this.my_mobile,
-                this.my_email);
+                this.my_email,
+                this.my_photo);
     }
 
     public ContactData withFirstname(String my_firstname) {
@@ -47,7 +50,8 @@ public record ContactData(String my_id,
                 this.my_company,
                 this.my_address,
                 this.my_mobile,
-                this.my_email);
+                this.my_email,
+                this.my_photo);
     }
 
     public ContactData withMiddlename(String my_middlename) {
@@ -60,7 +64,8 @@ public record ContactData(String my_id,
                 this.my_company,
                 this.my_address,
                 this.my_mobile,
-                this.my_email);
+                this.my_email,
+                this.my_photo);
     }
 
     public ContactData withLastname(String my_lastname) {
@@ -73,7 +78,8 @@ public record ContactData(String my_id,
                 this.my_company,
                 this.my_address,
                 this.my_mobile,
-                this.my_email);
+                this.my_email,
+                this.my_photo);
     }
 
     public ContactData withNickname(String my_nickname) {
@@ -86,7 +92,8 @@ public record ContactData(String my_id,
                 this.my_company,
                 this.my_address,
                 this.my_mobile,
-                this.my_email);
+                this.my_email,
+                this.my_photo);
     }
 
     public ContactData withTitle(String my_title) {
@@ -99,7 +106,8 @@ public record ContactData(String my_id,
                 this.my_company,
                 this.my_address,
                 this.my_mobile,
-                this.my_email);
+                this.my_email,
+                this.my_photo);
     }
 
     public ContactData withCompany(String my_company) {
@@ -112,7 +120,8 @@ public record ContactData(String my_id,
                 my_company,
                 this.my_address,
                 this.my_mobile,
-                this.my_email);
+                this.my_email,
+                this.my_photo);
     }
 
     public ContactData withAddress(String my_address) {
@@ -125,7 +134,8 @@ public record ContactData(String my_id,
                 this.my_company,
                 my_address,
                 this.my_mobile,
-                this.my_email);
+                this.my_email,
+                this.my_photo);
     }
 
     public ContactData withMobile(String my_mobile) {
@@ -138,7 +148,8 @@ public record ContactData(String my_id,
                 this.my_company,
                 this.my_address,
                 my_mobile,
-                this.my_email);
+                this.my_email,
+                this.my_photo);
     }
 
     public ContactData withEmail(String my_email) {
@@ -151,6 +162,21 @@ public record ContactData(String my_id,
                 this.my_company,
                 this.my_address,
                 this.my_mobile,
-                my_email);
+                my_email,
+                this.my_photo);
+    }
+
+    public ContactData withPhoto(String my_photo) {
+        return new ContactData(this.my_id,
+                this.my_firstname,
+                this.my_middlename,
+                this.my_lastname,
+                this.my_nickname,
+                this.my_title,
+                this.my_company,
+                this.my_address,
+                this.my_mobile,
+                this.my_email,
+                my_photo);
     }
 }

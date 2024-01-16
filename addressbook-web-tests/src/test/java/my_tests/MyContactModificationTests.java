@@ -1,5 +1,6 @@
 package my_tests;
 
+import my_common.MyCommonFunctions;
 import my_model.ContactData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,14 +23,19 @@ public class MyContactModificationTests extends TestBase {
                     "my_company",
                     "my_address",
                     "81236669977",
-                    "my_email@my_domain"));
+                    "my_email@my_domain",
+                    "src/test/resources/images/avatar.png"));
         }
         var myOldContacts = my_app.my_contacts().getMyContactList();
         var my_rnd = new Random();
         var my_index = my_rnd.nextInt(myOldContacts.size());
         var myTestData = new ContactData()
-                .withFirstname(String.format("mod firstname %s+%s", randomString(3), randomNumber(2)))
-                .withLastname(String.format("mod lastname %s+%s", randomString(3), randomNumber(2)));
+                .withFirstname(String.format("mod_fn_%s+%s",
+                        MyCommonFunctions.randomString(3),
+                        MyCommonFunctions.randomNumber(2)))
+                .withLastname(String.format("mod_ln_%s+%s",
+                        MyCommonFunctions.randomString(3),
+                        MyCommonFunctions.randomNumber(2)));
         my_app.my_contacts().modifyMyContact(myOldContacts.get(my_index), myTestData);
         var myNewContacts = my_app.my_contacts().getMyContactList();
         var myExpectedList = new ArrayList<>(myOldContacts);

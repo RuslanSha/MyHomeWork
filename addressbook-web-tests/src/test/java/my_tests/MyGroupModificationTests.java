@@ -1,5 +1,6 @@
 package my_tests;
 
+import my_common.MyCommonFunctions;
 import my_model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,8 +23,8 @@ public class MyGroupModificationTests extends TestBase {
         var my_rnd = new Random();
         var my_index = my_rnd.nextInt(myOldGroups.size());
         var myTestData = new GroupData().withName(String.format("modified name %s+%s",
-                randomString(3),
-                randomNumber(2)));
+                MyCommonFunctions.randomString(3),
+                MyCommonFunctions.randomNumber(2)));
         my_app.my_groups().modifyMyGroup(myOldGroups.get(my_index), myTestData);
         var myNewGroups = my_app.my_groups().getMyGroupList();
         var myExpectedList = new ArrayList<>(myOldGroups);

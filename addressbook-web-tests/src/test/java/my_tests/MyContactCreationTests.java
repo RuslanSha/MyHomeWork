@@ -1,31 +1,28 @@
 package my_tests;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import my_model.ContactData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class MyContactCreationTests extends TestBase {
 
-    public static List<ContactData> myContactProvider() {
-        var result = new ArrayList<ContactData>();
-        for (int i = 2; i < 4; i++) {
-            result.add(new ContactData("",
-                    randomString(i * 2),
-                    randomString(i * 2),
-                    randomString(i * 3),
-                    randomString(i * 2),
-                    randomString(i * 2),
-                    randomString(i * 4),
-                    randomString(i * 5),
-                    randomNumber(11),
-                    String.format("%s@%s.info", randomString(i * 2), randomString(i * 2))));
-        }
-        return result;
+    public static List<ContactData> myContactProvider() throws IOException {
+        var my_contacts = new ArrayList<ContactData>();
+        var myContactJson = Files.readString(Paths.get("my_contacts.json"));
+        ObjectMapper myContactMapper = new ObjectMapper();
+        var myContactValue = myContactMapper.readValue(myContactJson, new TypeReference<List<ContactData>>() {});
+        my_contacts.addAll(myContactValue);
+        return my_contacts;
     }
 
     @ParameterizedTest
@@ -47,6 +44,7 @@ public class MyContactCreationTests extends TestBase {
                 .withAddress("")
                 .withMobile("")
                 .withEmail("")
+                .withPhoto("")
         );
         myExpectedList.sort(compareById);
         Assertions.assertEquals(myNewContacts, myExpectedList);
