@@ -11,22 +11,22 @@ import my_model.ContactData;
 import my_model.GroupData;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class MyGenerator {
-    @Parameter(names = {"--type", "-t"})
-    String type;
+    @Parameter(names = {"--properties", "-p"})
+    String properties_file;
 
-    @Parameter(names = {"--output", "-o"})
-    String output;
+    private String contact_file;
+    private String group_file;
+    private String format;
+    private int count;
 
-    @Parameter(names = {"--format", "-f"})
-    String format;
-
-    @Parameter(names = {"--count", "-n"})
-    int count;
+    private Properties my_properties;
 
     public static void main(String[] args) throws IOException {
         var my_generator = new MyGenerator();
@@ -38,18 +38,21 @@ public class MyGenerator {
     }
 
     private void run() throws IOException {
-        var my_data = generate();
-        save(my_data);
-    }
+        my_properties = new Properties();
+        my_properties.load(new FileReader(System.getProperty("target", properties_file)));
 
-    private Object generate() {
-        if ("contacts".equals(type)) {
-            return generateContacts();
-        } else if ("groups".equals(type)) {
-            return generateGroups();
-        } else {
-            throw new IllegalArgumentException("Unknown data type " + type);
-        }
+        contact_file = my_properties.getProperty("file.contacts");
+        group_file = my_properties.getProperty("file.groups");
+        format = my_properties.getProperty("file.format");
+        count = Integer.parseInt(my_properties.getProperty("file.count"));
+
+        var my_contactData = generateContacts();
+        var my_contactOut = contact_file + "." + format;
+        save(my_contactData, my_contactOut);
+
+        var my_groupData = generateGroups();
+        var my_groupOut = group_file + "." + format;
+        save(my_groupData, my_groupOut);
     }
 
     private Object generateContacts() {
@@ -67,7 +70,7 @@ public class MyGenerator {
                     .withEmail(String.format("%s@%s.info",
                             MyCommonFunctions.randomString(i * 2),
                             MyCommonFunctions.randomString(i * 2)))
-                    .withPhoto(MyCommonFunctions.randomFile("src/test/resources/images")));
+                    .withPhoto(MyCommonFunctions.randomFile(my_properties.getProperty("file.photoDir"))));
         }
         return my_contacts;
     }
@@ -83,20 +86,20 @@ public class MyGenerator {
         return my_groups;
     }
 
-    private void save(Object my_data) throws IOException {
+    private void save(Object my_data, String my_output) throws IOException {
         if ("json".equals(format)) {
             ObjectMapper my_mapper = new ObjectMapper();
             my_mapper.enable(SerializationFeature.INDENT_OUTPUT);
             var my_json = my_mapper.writeValueAsString(my_data);
-            try (var writer = new FileWriter(output)) {
+            try (var writer = new FileWriter(my_output)) {
                 writer.write(my_json);
             }
         } else if ("yaml".equals(format)) {
             var my_mapper = new YAMLMapper();
-            my_mapper.writeValue(new File(output), my_data);
+            my_mapper.writeValue(new File(my_output), my_data);
         } else if ("xml".equals(format)) {
             var my_mapper = new XmlMapper();
-            my_mapper.writeValue(new File(output), my_data);
+            my_mapper.writeValue(new File(my_output), my_data);
         } else {
             throw new IllegalArgumentException("Unknown data format " + format);
         }

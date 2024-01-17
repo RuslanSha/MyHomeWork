@@ -3,6 +3,7 @@ package my_common;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Random;
+
 public class MyCommonFunctions {
 
     public static String randomString(int length) {

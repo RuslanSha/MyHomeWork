@@ -24,7 +24,7 @@ public class MyContactModificationTests extends TestBase {
                     "my_address",
                     "81236669977",
                     "my_email@my_domain",
-                    "src/test/resources/images/avatar.png"));
+                    my_app.my_properties().getProperty("file.photoDir") + "/avatar.png"));
         }
         var myOldContacts = my_app.my_contacts().getMyContactList();
         var my_rnd = new Random();
