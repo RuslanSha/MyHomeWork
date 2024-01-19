@@ -11,17 +11,17 @@ public class MyGroupRemovalTests extends TestBase {
 
     @Test
     public void canRemoveMyGroup() {
-        if (my_app.my_groups().getMyGroupsCount() == 0) {
-            my_app.my_groups().createMyGroup(new GroupData("",
+        if (my_app.my_hbm().getMyGroupsCount() == 0) {
+            my_app.my_hbm().createMyGroup(new GroupData("",
                     "group name",
                     "group header",
                     "group footer"));
         }
-        var myOldGroups = my_app.my_groups().getMyGroupList();
+        var myOldGroups = my_app.my_hbm().getMyGroupList();
         var my_rnd = new Random();
         var my_index = my_rnd.nextInt(myOldGroups.size());
         my_app.my_groups().removeMyGroup(myOldGroups.get(my_index));
-        var myNewGroups = my_app.my_groups().getMyGroupList();
+        var myNewGroups = my_app.my_hbm().getMyGroupList();
         var myExpectedList = new ArrayList<>(myOldGroups);
         myExpectedList.remove(my_index);
         Assertions.assertEquals(myNewGroups, myExpectedList);

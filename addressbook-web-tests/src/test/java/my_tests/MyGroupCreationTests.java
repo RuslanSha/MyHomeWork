@@ -27,18 +27,18 @@ public class MyGroupCreationTests extends TestBase {
 
     @ParameterizedTest
     @MethodSource("myGroupProvider")
-    public void canCreateMyMultipleGroup(GroupData my_group) {
-        var myOldGroups = my_app.my_groups().getMyGroupList();
+    public void canCreateGroup(GroupData my_group) {
+        var myOldGroups = my_app.my_jdbc().getMyGroupList();
         my_app.my_groups().createMyGroup(my_group);
-        var myNewGroups = my_app.my_groups().getMyGroupList();
+        var myNewGroups = my_app.my_jdbc().getMyGroupList();
         Comparator<GroupData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.my_id()), Integer.parseInt(o2.my_id()));
         };
         myNewGroups.sort(compareById);
+        var myMaxId = myNewGroups.get(myNewGroups.size() - 1).my_id();
+
         var myExpectedList = new ArrayList<>(myOldGroups);
-        myExpectedList.add(my_group.withId(myNewGroups.get(myNewGroups.size() - 1).my_id())
-                .withHeader("")
-                .withFooter(""));
+        myExpectedList.add(my_group.withId(myMaxId));
         myExpectedList.sort(compareById);
         Assertions.assertEquals(myNewGroups, myExpectedList);
     }

@@ -14,6 +14,8 @@ public class ApplicationManager {
     private LoginHelper my_session;
     private GroupHelper my_groups;
     private ContactHelper my_contacts;
+    private JdbcHelper my_jdbc;
+    private HibernateHelper my_hbm;
     private Properties my_properties;
 
     public void init(String my_browser, Properties my_properties) {
@@ -51,6 +53,19 @@ public class ApplicationManager {
         return my_contacts;
     }
 
+    public JdbcHelper my_jdbc() {
+        if (my_jdbc == null) {
+            my_jdbc = new JdbcHelper(this);
+        }
+        return my_jdbc;
+    }
+
+    public HibernateHelper my_hbm() {
+        if (my_hbm == null) {
+            my_hbm = new HibernateHelper(this);
+        }
+        return my_hbm;
+    }
     public Properties my_properties() {
         return my_properties;
     }

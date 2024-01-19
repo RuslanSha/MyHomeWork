@@ -6,7 +6,10 @@ public record GroupData(String my_id, String my_name, String my_header, String m
     }
 
     public GroupData withId(String my_id) {
-        return new GroupData(my_id, this.my_name, this.my_header, this.my_footer);
+        return new GroupData(my_id,
+                this.my_name,
+                this.my_header,
+                this.my_footer);
     }
 
     public GroupData withName(String my_name) {

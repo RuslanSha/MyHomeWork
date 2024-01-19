@@ -28,24 +28,17 @@ public class MyContactCreationTests extends TestBase {
     @ParameterizedTest
     @MethodSource("myContactProvider")
     public void canCreateMyMultipleContact(ContactData my_contact) {
-        var myOldContacts = my_app.my_contacts().getMyContactList();
+        var myOldContacts = my_app.my_jdbc().getMyContactList();
         my_app.my_contacts().createMyContact(my_contact);
-        var myNewContacts = my_app.my_contacts().getMyContactList();
+        var myNewContacts = my_app.my_jdbc().getMyContactList();
         Comparator<ContactData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.my_id()), Integer.parseInt(o2.my_id()));
         };
         myNewContacts.sort(compareById);
+        var myMaxId = myNewContacts.get(myNewContacts.size() - 1).my_id();
+
         var myExpectedList = new ArrayList<>(myOldContacts);
-        myExpectedList.add(my_contact.withId(myNewContacts.get(myNewContacts.size() - 1).my_id())
-                .withMiddlename("")
-                .withNickname("")
-                .withTitle("")
-                .withCompany("")
-                .withAddress("")
-                .withMobile("")
-                .withEmail("")
-                .withPhoto("")
-        );
+        myExpectedList.add(my_contact.withId(myMaxId).withPhoto(""));
         myExpectedList.sort(compareById);
         Assertions.assertEquals(myNewContacts, myExpectedList);
     }

@@ -13,8 +13,8 @@ public class MyContactModificationTests extends TestBase {
 
     @Test
     void canModifyMyContact() {
-        if (my_app.my_contacts().getMyContactsCount() == 0) {
-            my_app.my_contacts().createMyContact(new ContactData("",
+        if (my_app.my_hbm().getMyContactsCount() == 0) {
+            my_app.my_hbm().createMyContact(new ContactData("",
                     "my_firstname",
                     "my_middlename",
                     "my_lastname",
@@ -26,7 +26,7 @@ public class MyContactModificationTests extends TestBase {
                     "my_email@my_domain",
                     my_app.my_properties().getProperty("file.photoDir") + "/avatar.png"));
         }
-        var myOldContacts = my_app.my_contacts().getMyContactList();
+        var myOldContacts = my_app.my_hbm().getMyContactList();
         var my_rnd = new Random();
         var my_index = my_rnd.nextInt(myOldContacts.size());
         var myTestData = new ContactData()
@@ -37,9 +37,19 @@ public class MyContactModificationTests extends TestBase {
                         MyCommonFunctions.randomString(3),
                         MyCommonFunctions.randomNumber(2)));
         my_app.my_contacts().modifyMyContact(myOldContacts.get(my_index), myTestData);
-        var myNewContacts = my_app.my_contacts().getMyContactList();
+        var myNewContacts = my_app.my_hbm().getMyContactList();
         var myExpectedList = new ArrayList<>(myOldContacts);
-        myExpectedList.set(my_index, myTestData.withId(myOldContacts.get(my_index).my_id()));
+        myExpectedList.set(my_index, myTestData
+                .withId(myOldContacts.get(my_index).my_id())
+                .withMiddlename(myOldContacts.get(my_index).my_middlename())
+                .withNickname(myOldContacts.get(my_index).my_nickname())
+                .withTitle(myOldContacts.get(my_index).my_title())
+                .withCompany(myOldContacts.get(my_index).my_company())
+                .withAddress(myOldContacts.get(my_index).my_address())
+                .withMobile(myOldContacts.get(my_index).my_mobile())
+                .withEmail(myOldContacts.get(my_index).my_email())
+                .withPhoto(myOldContacts.get(my_index).my_photo())
+        );
         Comparator<ContactData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.my_id()), Integer.parseInt(o2.my_id()));
         };
