@@ -1,12 +1,12 @@
 package my_manager;
 
 import my_model.ContactData;
+import my_model.GroupData;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static net.bytebuddy.description.type.TypeList.Generic.ForDetachedTypes.attach;
 
 public class ContactHelper extends HelperBase {
 
@@ -20,6 +20,19 @@ public class ContactHelper extends HelperBase {
         fillMyContactForm(my_contact);
         submitMyContactCreation();
         returnToMyContactsPage();
+    }
+
+    public void createMyContact(ContactData my_contact, GroupData my_group) {
+        openMyContactsPage();
+        initMyContactCreation();
+        fillMyContactForm(my_contact);
+        selectMyGroup(my_group);
+        submitMyContactCreation();
+        returnToMyContactsPage();
+    }
+
+    private void selectMyGroup(GroupData my_group) {
+        new Select(my_manager.my_driver.findElement(By.name("new_group"))).selectByValue(my_group.my_id());
     }
 
     public void removeMyContact(ContactData my_contact) {

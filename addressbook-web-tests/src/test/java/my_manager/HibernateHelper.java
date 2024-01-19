@@ -65,6 +65,12 @@ public class HibernateHelper extends HelperBase  {
         });
     }
 
+    public List<ContactData> getMyContactsInGroup(GroupData my_group) {
+        return sessionFactory.fromSession(session -> {
+            return convertContactList(session.get(GroupRecord.class, my_group.my_id()).my_contacts);
+        });
+    }
+
     static List<ContactData> convertContactList(List<ContactRecord> my_records) {
         List<ContactData> result = new ArrayList<>();
         for (var my_record : my_records) {

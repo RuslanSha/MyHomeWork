@@ -59,4 +59,20 @@ public class JdbcHelper extends HelperBase {
         }
         return my_groups;
     }
+
+    public void checkConsistency() {
+        try (var my_conn = DriverManager.getConnection("jdbc:mysql://localhost/addressbook",
+                "root",
+                "");
+             var my_statement = my_conn.createStatement();
+             var my_result = my_statement.executeQuery(
+                     "SELECT * FROM address_in_groups aig LEFT JOIN addressbook ab ON ab.id = aig.id WHERE ab.id IS NULL;"))
+        {
+            while (my_result.next()) {
+                throw new IllegalStateException("Database is corrupted");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

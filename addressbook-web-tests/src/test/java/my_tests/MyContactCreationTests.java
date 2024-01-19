@@ -2,8 +2,12 @@ package my_tests;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import my_common.MyCommonFunctions;
+import my_generator.MyGenerator;
 import my_model.ContactData;
+import my_model.GroupData;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -15,7 +19,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class MyContactCreationTests extends TestBase {
-
     public static List<ContactData> myContactProvider() throws IOException {
         var my_contacts = new ArrayList<ContactData>();
         var myContactJson = Files.readString(Paths.get("my_contacts.json"));
@@ -41,5 +44,32 @@ public class MyContactCreationTests extends TestBase {
         myExpectedList.add(my_contact.withId(myMaxId).withPhoto(""));
         myExpectedList.sort(compareById);
         Assertions.assertEquals(myNewContacts, myExpectedList);
+    }
+    @Test
+    void canCreateMyContactInMyGroup() {
+        var my_contact = new ContactData()
+                .withFirstname(MyCommonFunctions.randomString(10))
+                .withMiddlename(MyCommonFunctions.randomString(4))
+                .withLastname(MyCommonFunctions.randomString(8))
+                .withNickname(MyCommonFunctions.randomString(4))
+                .withTitle(MyCommonFunctions.randomString(4))
+                .withCompany(MyCommonFunctions.randomString(8))
+                .withAddress(MyCommonFunctions.randomString(10))
+                .withMobile(MyCommonFunctions.randomNumber(11))
+                .withEmail(String.format("%s@%s.info",
+                        MyCommonFunctions.randomString(5),
+                        MyCommonFunctions.randomString(7)))
+                .withPhoto(MyCommonFunctions.randomFile(my_app.my_properties().getProperty("file.photoDir")));
+        if (my_app.my_hbm().getMyGroupsCount() == 0) {
+            my_app.my_hbm().createMyGroup(new GroupData("",
+                    "group name",
+                    "group header",
+                    "group footer"));
+        }
+        var my_group = my_app.my_hbm().getMyGroupList().get(0);
+        var oldRelated = my_app.my_hbm().getMyContactsInGroup(my_group);
+        my_app.my_contacts().createMyContact(my_contact, my_group);
+        var newRelated = my_app.my_hbm().getMyContactsInGroup(my_group);
+        Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
     }
 }

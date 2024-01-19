@@ -26,5 +26,4 @@ public class TestBase {
         my_app.my_session().close();
         my_app = null;
     }
-
 }
