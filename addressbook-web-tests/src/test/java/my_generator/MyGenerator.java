@@ -6,14 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import my_common.MyCommonFunctions;
 import my_model.ContactData;
 import my_model.GroupData;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -38,8 +34,10 @@ public class MyGenerator {
     }
 
     private void run() throws IOException {
+        FileReader my_stream = new FileReader(System.getProperty("target", properties_file));
+
         my_properties = new Properties();
-        my_properties.load(new FileReader(System.getProperty("target", properties_file)));
+        my_properties.load(my_stream);
 
         contact_file = my_properties.getProperty("file.contacts");
         group_file = my_properties.getProperty("file.groups");
@@ -59,18 +57,7 @@ public class MyGenerator {
         var my_contacts = new ArrayList<ContactData>();
         for (int i = 1; i <= count; i++) {
             my_contacts.add(new ContactData()
-                    .withFirstname(MyCommonFunctions.randomString(i * 2))
-                    .withMiddlename(MyCommonFunctions.randomString(i * 2))
-                    .withLastname(MyCommonFunctions.randomString(i * 3))
-                    .withNickname(MyCommonFunctions.randomString(i * 2))
-                    .withTitle(MyCommonFunctions.randomString(i * 2))
-                    .withCompany(MyCommonFunctions.randomString(i * 4))
-                    .withAddress(MyCommonFunctions.randomString(i * 5))
-                    .withMobile(MyCommonFunctions.randomNumber(11))
-                    .withEmail(String.format("%s@%s.info",
-                            MyCommonFunctions.randomString(i * 2),
-                            MyCommonFunctions.randomString(i * 2)))
-                    .withPhoto(MyCommonFunctions.randomFile(my_properties.getProperty("file.photoDir"))));
+                    .withRandomData(i, my_properties.getProperty("file.photoDir")));
         }
         return my_contacts;
     }
@@ -78,10 +65,7 @@ public class MyGenerator {
     private Object generateGroups() {
         var my_groups = new ArrayList<GroupData>();
         for (int i = 1; i <= count; i++) {
-            my_groups.add(new GroupData()
-                    .withName(MyCommonFunctions.randomString(i * 3))
-                    .withHeader(MyCommonFunctions.randomString(i * 3))
-                    .withFooter(MyCommonFunctions.randomString(i * 3)));
+            my_groups.add(new GroupData().withRandomData(i));
         }
         return my_groups;
     }

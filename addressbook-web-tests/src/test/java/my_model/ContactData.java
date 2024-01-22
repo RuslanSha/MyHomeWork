@@ -1,5 +1,7 @@
 package my_model;
 
+import my_common.MyCommonFunctions;
+
 public record ContactData(String my_id,
                           String my_firstname,
                           String my_middlename,
@@ -178,5 +180,21 @@ public record ContactData(String my_id,
                 this.my_mobile,
                 this.my_email,
                 my_photo);
+    }
+
+    public ContactData withRandomData(int my_salt, String my_photo_dir) {
+        return new ContactData(this.my_id,
+                MyCommonFunctions.randomString(my_salt * 2),
+                MyCommonFunctions.randomString(my_salt * 2),
+                MyCommonFunctions.randomString(my_salt * 3),
+                MyCommonFunctions.randomString(my_salt * 2),
+                MyCommonFunctions.randomString(my_salt * 2),
+                MyCommonFunctions.randomString(my_salt * 4),
+                MyCommonFunctions.randomString(my_salt * 5),
+                MyCommonFunctions.randomNumber(11),
+                String.format("%s@%s.info",
+                        MyCommonFunctions.randomString(my_salt * 2),
+                        MyCommonFunctions.randomString(my_salt * 2)),
+                MyCommonFunctions.randomFile(my_photo_dir));
     }
 }

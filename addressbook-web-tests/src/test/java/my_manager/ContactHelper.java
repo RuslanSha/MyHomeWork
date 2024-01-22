@@ -56,6 +56,14 @@ public class ContactHelper extends HelperBase {
         returnToMyHomePage();
     }
 
+    public void removeGroupFromMyContact(ContactData my_contact, GroupData my_group) {
+        openMyContactsPage();
+        selectMyContactByGroup(my_group);
+        selectMyContact(my_contact);
+        submitMyContactRemove();
+        returnToMyHomePage();
+    }
+
     public int getMyContactsCount() {
         openMyContactsPage();
         return my_manager.my_driver.findElements(By.name("selected[]")).size();
@@ -111,12 +119,21 @@ public class ContactHelper extends HelperBase {
         type(By.name("lastname"), my_contact.my_lastname());
     }
 
+    private void selectMyContactByGroup(GroupData my_group) {
+        click(By.name("group"));
+        click(By.cssSelector(String.format("option[value='%s']", my_group.my_id())));
+    }
+
     private void submitMyContactCreation() {
         click(By.name("submit"));
     }
 
     private void submitMyContactModification() {
         click(By.name("update"));
+    }
+
+    private void submitMyContactRemove() {
+        click(By.name("remove"));
     }
 
     private void selectMyContact(ContactData my_contact) {

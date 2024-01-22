@@ -6,18 +6,15 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Comparator;
+import java.util.Random;
 
 public class MyGroupModificationTests extends TestBase {
 
     @Test
     void canModifyMyGroup() {
         if (my_app.my_hbm().getMyGroupsCount() == 0) {
-            my_app.my_hbm().createMyGroup(new GroupData("",
-                    "group name",
-                    "group header",
-                    "group footer"));
+            my_app.my_hbm().createMyGroup(new GroupData().withRandomData(2));
         }
         var myOldGroups = my_app.my_hbm().getMyGroupList();
         var my_rnd = new Random();

@@ -20,7 +20,8 @@ public class MyGroupCreationTests extends TestBase {
         var my_groups = new ArrayList<GroupData>();
         var myGroupJson = Files.readString(Paths.get("my_groups.json"));
         ObjectMapper myGroupMapper = new ObjectMapper();
-        var myGroupValue = myGroupMapper.readValue(myGroupJson, new TypeReference<List<GroupData>>() {});
+        var myGroupValue = myGroupMapper.readValue(myGroupJson, new TypeReference<List<GroupData>>() {
+        });
         my_groups.addAll(myGroupValue);
         return my_groups;
     }

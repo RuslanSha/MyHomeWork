@@ -1,6 +1,7 @@
 package my_manager;
 
 import my_manager.hbm.ContactRecord;
+import my_manager.hbm.GroupInContact;
 import my_manager.hbm.GroupRecord;
 import my_model.ContactData;
 import my_model.GroupData;
@@ -10,18 +11,26 @@ import org.hibernate.cfg.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
-public class HibernateHelper extends HelperBase  {
+
+public class HibernateHelper extends HelperBase {
     private final SessionFactory sessionFactory;
+    private static String jdbcMysqlUrl;
+    private static String jdbcMysqlUsername;
+    private static String jdbcMysqlPassword;
 
     public HibernateHelper(ApplicationManager my_manager) {
         super(my_manager);
+        jdbcMysqlUrl = my_manager.my_properties().getProperty("db.baseUrl");
+        jdbcMysqlUsername = my_manager.my_properties().getProperty("db.username");
+        jdbcMysqlPassword = my_manager.my_properties().getProperty("db.password");
+
         sessionFactory = new Configuration()
                 .addAnnotatedClass(ContactRecord.class)
                 .addAnnotatedClass(GroupRecord.class)
-                .setProperty(AvailableSettings.URL,
-                        "jdbc:mysql://localhost/addressbook?zeroDateTimeBehavior=convertToNull")
-                .setProperty(AvailableSettings.USER, "root")
-                .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, "")
+                .addAnnotatedClass(GroupInContact.class)
+                .setProperty(AvailableSettings.URL, jdbcMysqlUrl)
+                .setProperty(AvailableSettings.USER, jdbcMysqlUsername)
+                .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, jdbcMysqlPassword)
                 .buildSessionFactory();
     }
 
@@ -37,6 +46,16 @@ public class HibernateHelper extends HelperBase  {
         sessionFactory.inSession(session -> {
             session.getTransaction().begin();
             session.persist(convert(my_groupData));
+            session.getTransaction().commit();
+        });
+    }
+
+    public void addGroupToContact(ContactData my_contactdata, GroupData my_groupdata) {
+        sessionFactory.inSession(session -> {
+            var newGroupInContact = new GroupInContact(Integer.parseInt(my_contactdata.my_id()),
+                    Integer.parseInt(my_groupdata.my_id()));
+            session.getTransaction().begin();
+            session.persist(newGroupInContact);
             session.getTransaction().commit();
         });
     }
@@ -68,6 +87,23 @@ public class HibernateHelper extends HelperBase  {
     public List<ContactData> getMyContactsInGroup(GroupData my_group) {
         return sessionFactory.fromSession(session -> {
             return convertContactList(session.get(GroupRecord.class, my_group.my_id()).my_contacts);
+        });
+    }
+
+    public long getMyGroupsInContactCount() {
+        return sessionFactory.fromSession(session -> {
+            return session.createQuery("select count (*) from GroupInContact", Long.class).getSingleResult();
+        });
+    }
+
+    public List<GroupData> getMyGroupsInContact() {
+        return sessionFactory.fromSession(session -> {
+            var my_contacts = getMyContactList();
+            List<GroupRecord> result = new ArrayList<>();
+            for (var my_contact : my_contacts) {
+                result.addAll(session.get(ContactRecord.class, my_contact.my_id()).my_groups);
+            }
+            return convertGroupList(result);
         });
     }
 

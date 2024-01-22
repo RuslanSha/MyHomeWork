@@ -2,6 +2,7 @@ package my_tests;
 
 import my_common.MyCommonFunctions;
 import my_model.ContactData;
+import my_model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,17 +15,8 @@ public class MyContactModificationTests extends TestBase {
     @Test
     void canModifyMyContact() {
         if (my_app.my_hbm().getMyContactsCount() == 0) {
-            my_app.my_hbm().createMyContact(new ContactData("",
-                    "my_firstname",
-                    "my_middlename",
-                    "my_lastname",
-                    "my_nickname",
-                    "my_title",
-                    "my_company",
-                    "my_address",
-                    "81236669977",
-                    "my_email@my_domain",
-                    my_app.my_properties().getProperty("file.photoDir") + "/avatar.png"));
+            my_app.my_hbm().createMyContact(new ContactData().withRandomData(2,
+                    my_app.my_properties().getProperty("file.photoDir")));
         }
         var myOldContacts = my_app.my_hbm().getMyContactList();
         var my_rnd = new Random();
@@ -56,5 +48,26 @@ public class MyContactModificationTests extends TestBase {
         myNewContacts.sort(compareById);
         myExpectedList.sort(compareById);
         Assertions.assertEquals(myNewContacts, myExpectedList);
+    }
+
+    @Test
+    void canModifyMyContactOutMyGroup() {
+        if (my_app.my_hbm().getMyContactsCount() == 0) {
+            my_app.my_hbm().createMyContact(new ContactData().withRandomData(2,
+                    my_app.my_properties().getProperty("file.photoDir")));
+        }
+        if (my_app.my_hbm().getMyGroupsCount() == 0) {
+            my_app.my_hbm().createMyGroup(new GroupData().withRandomData(2));
+        }
+        if (my_app.my_hbm().getMyGroupsInContactCount() == 0) {
+            my_app.my_hbm().addGroupToContact(my_app.my_hbm().getMyContactList().get(0),
+                    my_app.my_hbm().getMyGroupList().get(0));
+        }
+        var my_group = my_app.my_hbm().getMyGroupsInContact().get(0);
+        var oldRelated = my_app.my_hbm().getMyContactsInGroup(my_group);
+        var my_contact = oldRelated.get(0);
+        my_app.my_contacts().removeGroupFromMyContact(my_contact, my_group);
+        var newRelated = my_app.my_hbm().getMyContactsInGroup(my_group);
+        Assertions.assertEquals(oldRelated.size() - 1, newRelated.size());
     }
 }

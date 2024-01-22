@@ -2,8 +2,6 @@ package my_tests;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import my_common.MyCommonFunctions;
-import my_generator.MyGenerator;
 import my_model.ContactData;
 import my_model.GroupData;
 import org.junit.jupiter.api.Assertions;
@@ -23,7 +21,8 @@ public class MyContactCreationTests extends TestBase {
         var my_contacts = new ArrayList<ContactData>();
         var myContactJson = Files.readString(Paths.get("my_contacts.json"));
         ObjectMapper myContactMapper = new ObjectMapper();
-        var myContactValue = myContactMapper.readValue(myContactJson, new TypeReference<List<ContactData>>() {});
+        var myContactValue = myContactMapper.readValue(myContactJson, new TypeReference<List<ContactData>>() {
+        });
         my_contacts.addAll(myContactValue);
         return my_contacts;
     }
@@ -45,26 +44,13 @@ public class MyContactCreationTests extends TestBase {
         myExpectedList.sort(compareById);
         Assertions.assertEquals(myNewContacts, myExpectedList);
     }
+
     @Test
     void canCreateMyContactInMyGroup() {
-        var my_contact = new ContactData()
-                .withFirstname(MyCommonFunctions.randomString(10))
-                .withMiddlename(MyCommonFunctions.randomString(4))
-                .withLastname(MyCommonFunctions.randomString(8))
-                .withNickname(MyCommonFunctions.randomString(4))
-                .withTitle(MyCommonFunctions.randomString(4))
-                .withCompany(MyCommonFunctions.randomString(8))
-                .withAddress(MyCommonFunctions.randomString(10))
-                .withMobile(MyCommonFunctions.randomNumber(11))
-                .withEmail(String.format("%s@%s.info",
-                        MyCommonFunctions.randomString(5),
-                        MyCommonFunctions.randomString(7)))
-                .withPhoto(MyCommonFunctions.randomFile(my_app.my_properties().getProperty("file.photoDir")));
+        var my_contact = new ContactData().withRandomData(2,
+                my_app.my_properties().getProperty("file.photoDir"));
         if (my_app.my_hbm().getMyGroupsCount() == 0) {
-            my_app.my_hbm().createMyGroup(new GroupData("",
-                    "group name",
-                    "group header",
-                    "group footer"));
+            my_app.my_hbm().createMyGroup(new GroupData().withRandomData(2));
         }
         var my_group = my_app.my_hbm().getMyGroupList().get(0);
         var oldRelated = my_app.my_hbm().getMyContactsInGroup(my_group);

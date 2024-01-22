@@ -6,7 +6,10 @@ group = 'org.example'
 version = '1.0-SNAPSHOT'
 
 repositories {
-    mavenLocal()
+    maven {
+        url "http://nexus.gazprom-neft.local:8080/repository/maven2-maven-external-dso/"
+        allowInsecureProtocol = true
+    }
 }
 
 dependencies {

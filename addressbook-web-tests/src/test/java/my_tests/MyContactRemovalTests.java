@@ -12,17 +12,8 @@ public class MyContactRemovalTests extends TestBase {
     @Test
     public void canRemoveMyContact() {
         if (my_app.my_hbm().getMyContactsCount() == 0) {
-            my_app.my_hbm().createMyContact(new ContactData("",
-                    "my_firstname",
-                    "my_middlename",
-                    "my_lastname",
-                    "my_nickname",
-                    "my_title",
-                    "my_company",
-                    "my_address",
-                    "81236669977",
-                    "my_email@my_domain",
-                    my_app.my_properties().getProperty("file.photoDir") + "/avatar.png"));
+            my_app.my_hbm().createMyContact(new ContactData().withRandomData(2,
+                    my_app.my_properties().getProperty("file.photoDir")));
         }
         var myOldContacts = my_app.my_hbm().getMyContactList();
         var my_rnd = new Random();
