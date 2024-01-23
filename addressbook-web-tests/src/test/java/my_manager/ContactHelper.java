@@ -18,7 +18,7 @@ public class ContactHelper extends HelperBase {
         openMyContactsPage();
         initMyContactCreation();
         fillMyContactForm(my_contact);
-        submitMyContactCreation();
+        submitMyContact();
         returnToMyContactsPage();
     }
 
@@ -27,12 +27,8 @@ public class ContactHelper extends HelperBase {
         initMyContactCreation();
         fillMyContactForm(my_contact);
         selectMyGroup(my_group);
-        submitMyContactCreation();
+        submitMyContact();
         returnToMyContactsPage();
-    }
-
-    private void selectMyGroup(GroupData my_group) {
-        new Select(my_manager.my_driver.findElement(By.name("new_group"))).selectByValue(my_group.my_id());
     }
 
     public void removeMyContact(ContactData my_contact) {
@@ -52,7 +48,15 @@ public class ContactHelper extends HelperBase {
         selectMyContact(my_contact);
         initMyContactModification(my_contact);
         fillMyContactName(my_modifiedContact);
-        submitMyContactModification();
+        updateMyContact();
+        returnToMyHomePage();
+    }
+
+    public void modifyMyContact(ContactData my_contact, GroupData my_group) {
+        openMyContactsPage();
+        selectMyContact(my_contact);
+        selectMyNewGroup(my_group);
+        addMyContact();
         returnToMyHomePage();
     }
 
@@ -60,7 +64,7 @@ public class ContactHelper extends HelperBase {
         openMyContactsPage();
         selectMyContactByGroup(my_group);
         selectMyContact(my_contact);
-        submitMyContactRemove();
+        removeMyContact();
         returnToMyHomePage();
     }
 
@@ -119,20 +123,31 @@ public class ContactHelper extends HelperBase {
         type(By.name("lastname"), my_contact.my_lastname());
     }
 
-    private void selectMyContactByGroup(GroupData my_group) {
-        click(By.name("group"));
-        click(By.cssSelector(String.format("option[value='%s']", my_group.my_id())));
+    private void selectMyGroup(GroupData my_group) {
+        new Select(my_manager.my_driver.findElement(By.name("new_group"))).selectByValue(my_group.my_id());
     }
 
-    private void submitMyContactCreation() {
+    private void selectMyNewGroup(GroupData my_group) {
+        click(By.name("to_group"), By.cssSelector(String.format("option[value='%s']", my_group.my_id())));
+    }
+
+    private void selectMyContactByGroup(GroupData my_group) {
+        click(By.name("group"), By.cssSelector(String.format("option[value='%s']", my_group.my_id())));
+    }
+
+    private void submitMyContact() {
         click(By.name("submit"));
     }
 
-    private void submitMyContactModification() {
+    private void addMyContact() {
+        click(By.name("add"));
+    }
+
+    private void updateMyContact() {
         click(By.name("update"));
     }
 
-    private void submitMyContactRemove() {
+    private void removeMyContact() {
         click(By.name("remove"));
     }
 

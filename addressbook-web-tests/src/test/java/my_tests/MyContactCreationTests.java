@@ -37,12 +37,15 @@ public class MyContactCreationTests extends TestBase {
             return Integer.compare(Integer.parseInt(o1.my_id()), Integer.parseInt(o2.my_id()));
         };
         myNewContacts.sort(compareById);
-        var myMaxId = myNewContacts.get(myNewContacts.size() - 1).my_id();
 
+        int myLastNdx = myNewContacts.size() - 1;
+        var myLastId = myNewContacts.get(myLastNdx).my_id();
+        var myLastPhoto = myNewContacts.get(myLastNdx).my_photo();
         var myExpectedList = new ArrayList<>(myOldContacts);
-        myExpectedList.add(my_contact.withId(myMaxId).withPhoto(""));
+        myExpectedList.add(my_contact.withId(myLastId).withPhoto(myLastPhoto));
+
         myExpectedList.sort(compareById);
-        Assertions.assertEquals(myNewContacts, myExpectedList);
+        Assertions.assertEquals(myExpectedList, myNewContacts);
     }
 
     @Test

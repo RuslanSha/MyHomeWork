@@ -51,6 +51,26 @@ public class MyContactModificationTests extends TestBase {
     }
 
     @Test
+    void canModifyMyContactInMyGroup() {
+        if (my_app.my_hbm().getMyContactsCount() == 0) {
+            my_app.my_hbm().createMyContact(new ContactData().withRandomData(2,
+                    my_app.my_properties().getProperty("file.photoDir")));
+        }
+        if (my_app.my_hbm().getMyGroupsCount() == 0) {
+            my_app.my_hbm().createMyGroup(new GroupData().withRandomData(2));
+        }
+        var my_contact = my_app.my_hbm().getMyContactList().get(0);
+        var my_group = my_app.my_hbm().getMyGroupList().get(0);
+        if (my_app.my_hbm().getMyContactsInGroup(my_group).contains(my_contact)) {
+            my_app.my_hbm().removeGroupFromMyContact(my_contact, my_group);
+        }
+        var oldRelated = my_app.my_hbm().getMyContactsInGroup(my_group);
+        my_app.my_contacts().modifyMyContact(my_contact, my_group);
+        var newRelated = my_app.my_hbm().getMyContactsInGroup(my_group);
+        Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
+    }
+
+    @Test
     void canModifyMyContactOutMyGroup() {
         if (my_app.my_hbm().getMyContactsCount() == 0) {
             my_app.my_hbm().createMyContact(new ContactData().withRandomData(2,
@@ -60,7 +80,7 @@ public class MyContactModificationTests extends TestBase {
             my_app.my_hbm().createMyGroup(new GroupData().withRandomData(2));
         }
         if (my_app.my_hbm().getMyGroupsInContactCount() == 0) {
-            my_app.my_hbm().addGroupToContact(my_app.my_hbm().getMyContactList().get(0),
+            my_app.my_hbm().addGroupToMyContact(my_app.my_hbm().getMyContactList().get(0),
                     my_app.my_hbm().getMyGroupList().get(0));
         }
         var my_group = my_app.my_hbm().getMyGroupsInContact().get(0);
